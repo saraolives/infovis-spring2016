@@ -8,19 +8,40 @@
         <style>
               div.bar {
               display: inline-block;
-              width: 20px;
+              width: 3px;
               height: 75px;   /* We'll override height later */
-              background-color: teal;
+              background-color: #b76e79;
+              margin-right: 4px;
               }
         </style>
-}
+
 
     </head>
     <body>
+
+      <h1>Test Page! Getting the data....</h3>
         <script type="text/javascript">
-        var dataset = [ 5, 10, 15, 20, 25 ];
 
+        var dataset;
 
+        d3.csv("sara-name-data.csv", function(data) {
+          dataset = data;
+
+          generateVis(dataset);
+
+          });
+
+          function generateVis(dataset) {
+            d3.select("body").selectAll("div")
+              .data(dataset)
+              .enter()
+              .append("div")
+              .attr("class", "bar")
+              .style("height", function(d) {
+                var barHeight = d["percent"] * 50000;  //Scale up by factor of 5
+                return barHeight + "px";
+              });
+          }
 
         </script>
     </body>
