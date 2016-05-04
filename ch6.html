@@ -20,6 +20,18 @@
         <script type="text/javascript">
         var dataset = [ 5, 10, 15, 20, 25 ];
 
+<<<<<<< Updated upstream
+=======
+        var dataset;
+
+        d3.csv("sara-name-data.csv", function(data) {
+          console.log(data);
+          dataset = data;
+
+          generateVis(dataset);
+
+          });
+>>>>>>> Stashed changes
 
 
         </script>
