@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Page Template</title>
+        <script type="text/javascript" src="d3/d3.js"></script>
+        <script   src="https://code.jquery.com/jquery-2.2.3.min.js"
+        integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+        crossorigin="anonymous"></script>
+
+        <style>
+
+        #svgVisualize {
+          background-color: #ececec;
+          margin-top:15px;
+        }
+
+        #danielbutton{
+          background-color:#3498db;
+        	border-radius:20px;
+        	border:1px solid black;
+        	display:inline-block;
+        	cursor:pointer;
+        	color:#ffffff;
+        	font-family:Arial;
+        	font-size:17px;
+        	padding:10px 21px;
+        	text-decoration:none;
+        }
+
+        #danielbutton:active {
+        	position:relative;
+        	top:1px;
+        }
+
+
+        #sarabutton{
+        	background-color:#319b54;
+        	border-radius:20px;
+        	border:1px solid black;
+        	display:inline-block;
+        	cursor:pointer;
+        	color:#ffffff;
+        	font-family:Arial;
+        	font-size:17px;
+        	padding:10px 21px;
+        	text-decoration:none;
+        }
+
+        #sarabutton:active {
+        	position:relative;
+        	top:1px;
+        }
+
+        #sallybutton{
+        	background-color:#fccf4b;
+        	border-radius:20px;
+        	border:1px solid black;
+        	display:inline-block;
+        	cursor:pointer;
+        	color:#ffffff;
+        	font-family:Arial;
+        	font-size:17px;
+        	padding:10px 21px;
+        	text-decoration:none;
+        }
+
+        #sallybutton:active {
+        	position:relative;
+        	top:1px;
+        }
+
+        #russellbutton{
+        	background-color:#e74c3c;
+        	border-radius:20px;
+        	border:1px solid black;
+        	display:inline-block;
+        	cursor:pointer;
+        	color:#ffffff;
+        	font-family:Arial;
+        	font-size:17px;
+        	padding:10px 21px;
+        	text-decoration:none;
+        }
+
+        #russellbutton:active {
+        	position:relative;
+        	top:1px;
+        }
+
+
+        </style>
+
+
+    </head>
+    <body>
+
+      <h1>Test Page! Line Charts</h3>
+
+        <h3>Popularity of the Names My Family's First Names from 1880 to 2008</h3><br>
+
+        <button id="danielbutton" value="Daniel">Daniel</button>
+        <button id="sarabutton" value="Sara">Sara</button>
+        <button id="sallybutton" value="Sally">Sally</button>
+        <button id="russellbutton" value="Russell">Russell</button><br>
+
+        <svg id="svgVisualize" width="1000" height="550"></svg>
+
+        <script type="text/javascript">
+
+        d3.csv("sara-name-data.csv", function(data) {
+
+          var sampleData = data;
+
+          InitChart();
+
+          function InitChart(){
+            var vis = d3.select("#svgVisualize"),
+            WIDTH= 1000,
+            HEIGHT = 500,
+            MARGINS = {
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 50
+            },
+
+            xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(sampleData, function(d) { return (d.year); }), d3.max(sampleData, function(d) {return d.year; })]),
+            yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(sampleData, function(d) { return (d.sallypercent*1000); }), d3.max(sampleData, function(d) {return d.dpercent*1000; })]),
+
+            xAxis = d3.svg.axis().scale(xRange).tickSize(5).tickSubdivide(true),
+            yAxis = d3.svg.axis().scale(yRange).tickSize(5).orient("left").tickSubdivide(true);
+
+            vis.append("svg:g").attr("class", "x axis").call(xAxis).attr("transform", "translate(0, " + (HEIGHT - MARGINS.bottom) + ")");
+            vis.append("svg:g").attr("class", "y axis").call(yAxis).attr("transform", "translate(" + (MARGINS.left) + ", 0)");
+
+
+            var lineFunction = d3.svg.line()
+                .x(function(d) {
+                  return xRange(d.year);
+                })
+                .y(function(d) {
+                  return yRange(d.spercent*1000);
+                })
+                .interpolate("basis");
+
+                var path1;
+
+              $("#sarabutton").click(function(){
+                if ( path1 ) {
+                    path1.remove();
+                    path1 = null;
+                } else {
+                  path1=vis.append('svg:path')
+                  .attr('d', lineFunction(sampleData))
+                  .attr('stroke', '#319b54')
+                  .attr('stroke-width', 3)
+                  .attr('fill', 'none');
+                }
+              });
+
+
+
+            var lineFunction2 = d3.svg.line()
+                .x(function(d) {
+                  return xRange(d.year);
+                })
+                .y(function(d) {
+                  return yRange(d.dpercent*1000);
+                })
+                .interpolate("basis");
+
+                var path2;
+
+                $("#danielbutton").click(function(){
+                  if ( path2 ) {
+                      path2.remove();
+                      path2 = null;
+                  } else {
+                      path2 = vis.append('svg:path')
+                      .attr('d', lineFunction2(sampleData))
+                      .attr('stroke', '#3498db')
+                      .attr('stroke-width', 3)
+                      .attr('fill', 'none')
+                  }
+                });
+
+            var lineFunction3 = d3.svg.line()
+                .x(function(d) {
+                  return xRange(d.year);
+                })
+                .y(function(d) {
+                  return yRange(d.russellpercent*1000);
+                })
+                .interpolate("basis");
+
+                var path3;
+
+                $("#russellbutton").click(function(){
+                  if ( path3 ) {
+                      path3.remove();
+                      path3 = null;
+                  } else {
+                      path3 = vis.append('svg:path')
+                      .attr('d', lineFunction3(sampleData))
+                      .attr('stroke', '#e74c3c')
+                      .attr('stroke-width', 3)
+                      .attr('fill', 'none')
+                  }
+                });
+
+                var lineFunction4 = d3.svg.line()
+                    .x(function(d) {
+                      return xRange(d.year);
+                    })
+                    .y(function(d) {
+                      return yRange(d.sallypercent*1000);
+                    })
+                    .interpolate("basis");
+
+                    var path4;
+
+                    $("#sallybutton").click(function(){
+                      if ( path4 ) {
+                          path4.remove();
+                          path4 = null;
+                      } else {
+                          path4 = vis.append('svg:path')
+                          .attr('d', lineFunction4(sampleData))
+                          .attr('stroke', '#fccf4b')
+                          .attr('stroke-width', 3)
+                          .attr('fill', 'none')
+                      }
+                      var tooltip = d3.select("body").data(sampleData)
+                             .append("div")
+                             .style("position", "absolute")
+                             .style("background-color", "#fff")
+                             .style("border", "1px solid black")
+                             .style("z-index", "10")
+                             .style("visibility", "hidden");
+
+                    });
+
+
+
+
+
+
+
+            };
+
+        });
+
+
+        </script>
+    </body>
+</html>
