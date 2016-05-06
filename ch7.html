@@ -11,7 +11,7 @@
         <style>
 
         #svgVisualize {
-          background-color: #319b54;
+          background-color: #ececec;
         }
 
         #svgVisualize2 {
@@ -23,13 +23,14 @@
     </head>
     <body>
 
-      <h1>Line Charts</h3>
+      <h1>Test Page! Line Charts</h3>
 
         <h3>Popularity of the Name "Sara" from 1880 to 2008</h3>
         <svg id="svgVisualize" width="1000" height="550"></svg>
 
         <h3>Popularity of the Name "Daniel" from 1880 to 2008</h3>
         <svg id="svgVisualize2" width="1000" height="550"></svg>
+
 
         <script type="text/javascript">
 
@@ -39,33 +40,72 @@
 
           var sampleData = data;
 
-          InitChart();
 
-        // function InitChart(){
-        //   var vis = d3.select("#svgVisualize");
-        //
-        //   var xRange = d3.scale.linear().range([40, 1100]).domain([d3.min(sampleData, function(d) { return (d.year); }), d3.max(sampleData, function(d) {return d.year; })]);
-        //   var yRange = d3.scale.linear().range([400, 40]).domain([d3.min(sampleData, function(d) { return (d.percent*1000); }), d3.max(sampleData, function(d) {return d.percent*1000; })]);
-        //
-        //   var xAxis = d3.svg.axis().scale(xRange);
-        //   var yAxis = d3.svg.axis().scale(yRange).orient("left");
-        //
-        //   vis.append("svg:g").call(xAxis).attr("transform", "translate(0,400)");
-        //   vis.append("svg:g").call(yAxis).attr("transform", "translate(40, 0)");
-        //
-        //   var circles = vis.selectAll("circle").data(sampleData);
-        //
-        //   circles.enter()
-        //          .insert("circle")
-        //          .attr("cx", function(d) {return xRange (d.year); })
-        //          .attr("cy", function(d) {return yRange (d.percent*1000); })
-        //          .attr("r", 4)
-        //          .style("fill", "#50c878");
-        //
-        // };
+
+          InitChart();
 
         function InitChart(){
           var vis = d3.select("#svgVisualize"),
+          WIDTH= 1000,
+          HEIGHT = 500,
+          MARGINS = {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 50
+          },
+
+          xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(sampleData, function(d) { return (d.year); }), d3.max(sampleData, function(d) {return d.year; })]),
+          yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(sampleData, function(d) { return (d.spercent*1000); }), d3.max(sampleData, function(d) {return d.spercent*1000; })]),
+
+          xAxis = d3.svg.axis().scale(xRange).tickSize(5).tickSubdivide(true),
+          yAxis = d3.svg.axis().scale(yRange).tickSize(5).orient("left").tickSubdivide(true);
+
+          vis.append("svg:g").attr("class", "x axis").call(xAxis).attr("transform", "translate(0, " + (HEIGHT - MARGINS.bottom) + ")");
+          vis.append("svg:g").attr("class", "y axis").call(yAxis).attr("transform", "translate(" + (MARGINS.left) + ", 0)");
+
+
+          var lineFunction = d3.svg.line()
+              .x(function(d) {
+                return xRange(d.year);
+              })
+              .y(function(d) {
+                return yRange(d.spercent*1000);
+              })
+              .interpolate("basis");
+
+              vis.append('svg:path')
+                .attr('d', lineFunction(sampleData))
+                .attr('stroke', '#319b54')
+                .attr('stroke-width', 2)
+                .attr('fill', 'none');
+
+
+          //
+          // var circles = vis.selectAll("circle").data(sampleData);
+          //
+          // circles.enter()
+          //        .insert("circle")
+          //        .attr("cx", function(d) {return xRange (d.year); })
+          //        .attr("cy", function(d) {return yRange (d.spercent*1000); })
+          //        .attr("r", 4)
+          //        .style("fill", "#fff");
+
+        };
+
+        });
+
+
+        d3.csv("daniel-name-data.csv", function(data) {
+
+          console.log(data);
+
+          var sampleData = data;
+
+          InitChart();
+
+        function InitChart(){
+          var vis = d3.select("#svgVisualize2"),
           WIDTH= 1000,
           HEIGHT = 500,
           MARGINS = {
@@ -84,6 +124,7 @@
           vis.append("svg:g").attr("class", "x axis").call(xAxis).attr("transform", "translate(0, " + (HEIGHT - MARGINS.bottom) + ")");
           vis.append("svg:g").attr("class", "y axis").call(yAxis).attr("transform", "translate(" + (MARGINS.left) + ", 0)");
 
+
           var lineFunction = d3.svg.line()
               .x(function(d) {
                 return xRange(d.year);
@@ -99,12 +140,14 @@
                 .attr('stroke-width', 2)
                 .attr('fill', 'none');
 
+
+          //
           // var circles = vis.selectAll("circle").data(sampleData);
           //
           // circles.enter()
           //        .insert("circle")
           //        .attr("cx", function(d) {return xRange (d.year); })
-          //        .attr("cy", function(d) {return yRange (d.percent*1000); })
+          //        .attr("cy", function(d) {return yRange (d.spercent*1000); })
           //        .attr("r", 4)
           //        .style("fill", "#fff");
 
@@ -113,70 +156,6 @@
         });
 
 
-
-          // generateVis(dataset);
-          //
-          // });
-          //
-          // function generateVis(dataset) {
-          //   d3.select("body").selectAll("div")
-          //     .data(dataset)
-          //     .enter()
-          //     .append("div")
-          //     .attr("class", "bar")
-          //     .style("height", function(d) {
-          //       var barHeight = d["percent"] * 50000;  //Scale up by factor of 5
-          //       return barHeight + "px";
-          //     });
-          //}
-
-
-
-          d3.csv("daniel-name-data.csv", function(data) {
-
-            console.log(data);
-
-            var sampleData = data;
-
-            InitChart2();
-
-            function InitChart2(){
-              var vis = d3.select("#svgVisualize2"),
-              WIDTH= 1000,
-              HEIGHT = 500,
-              MARGINS = {
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 50
-              },
-
-              xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(sampleData, function(d) { return (d.year); }), d3.max(sampleData, function(d) {return d.year; })]),
-              yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(sampleData, function(d) { return (d.percent*1000); }), d3.max(sampleData, function(d) {return d.percent*1000; })]),
-
-              xAxis = d3.svg.axis().scale(xRange).tickSize(5).tickSubdivide(true),
-              yAxis = d3.svg.axis().scale(yRange).tickSize(5).orient("left").tickSubdivide(true);
-
-              vis.append("svg:g").attr("class", "x axis").call(xAxis).attr("transform", "translate(0, " + (HEIGHT - MARGINS.bottom) + ")");
-              vis.append("svg:g").attr("class", "y axis").call(yAxis).attr("transform", "translate(" + (MARGINS.left) + ", 0)");
-
-              var lineFunction = d3.svg.line()
-                  .x(function(d) {
-                    return xRange(d.year);
-                  })
-                  .y(function(d) {
-                    return yRange(d.percent*1000);
-                  })
-                  .interpolate("basis");
-
-                  vis.append('svg:path')
-                    .attr('d', lineFunction(sampleData))
-                    .attr('stroke', '#ffffff')
-                    .attr('stroke-width', 2)
-                    .attr('fill', 'none');
-                  };
-
-                  });
         </script>
     </body>
 </html>

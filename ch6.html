@@ -8,31 +8,46 @@
         <style>
               div.bar {
               display: inline-block;
-              width: 20px;
-              height: 75px;   /* We'll override height later */
+              width: 5px;
+              height: 75px;
               background-color: teal;
+              margin-right: 4px;
               }
         </style>
-}
+
 
     </head>
     <body>
-        <script type="text/javascript">
-        var dataset = [ 5, 10, 15, 20, 25 ];
 
-<<<<<<< Updated upstream
-=======
+      <h1>Test Page! Getting the data....</h3>
+        <h3>Bar Charts!</h3>
+
+        <div id="divVisualize"></div>
+        <script type="text/javascript">
+
         var dataset;
 
-        d3.csv("sara-name-data.csv", function(data) {
-          console.log(data);
+        d3.csv("daniel-name-data.csv", function(data) {
           dataset = data;
 
           generateVis(dataset);
 
           });
->>>>>>> Stashed changes
 
+          function generateVis(dataset) {
+
+    
+
+            d3.select("body").selectAll("div")
+              .data(dataset)
+              .enter()
+              .append("div")
+              .attr("class", "bar")
+              .style("height", function(d) {
+                var barHeight = d["percent"] * 10000;  //Scale up
+                return barHeight + "px";
+              });
+          }
 
         </script>
     </body>
